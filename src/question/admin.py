@@ -3,7 +3,7 @@ from .models import Question
 
 
 class QuestionAdmin(admin.ModelAdmin):
-    readonly_fields=("publish","upd_date")
+    readonly_fields=("publish","update")
     list_display=("author","score")
     list_filter=("author","score")
     fieldsets=(

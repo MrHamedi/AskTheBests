@@ -13,3 +13,6 @@ db.sqlite3
 
 #Ignore os environment 
 .bash_profile
+
+#Ignore migrations 
+migrations/
