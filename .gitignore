@@ -1,0 +1,15 @@
+#Ignore virtualenv 
+/venv/
+
+#Ignore media files 
+/media/ .gitkeep
+
+#Ignore bytecodes 
+__pycache__/
+.py[co]
+
+#Ignore database 
+db.sqlite3
+
+#Ignore os environment 
+.bash_profile
