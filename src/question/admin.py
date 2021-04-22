@@ -4,10 +4,10 @@ from .models import Question
 
 class QuestionAdmin(admin.ModelAdmin):
     readonly_fields=("publish","update")
-    list_display=("author","score")
+    list_display=("author","score","publish")
     list_filter=("author","score")
     fieldsets=(
-            (None,{"fields":("author","slug","publish")}),
+            (None,{"fields":("author","slug","publish","update","tags")}),
             ("Info",{"classes":("collapse",),"fields":("score","title","body")})
     )
 
