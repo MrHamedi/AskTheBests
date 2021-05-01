@@ -10,3 +10,5 @@ class HomePageView(ListView):
     template_name="question/homepage.html"
     context_object_name="questions"
     paginate_by=1
+
+
