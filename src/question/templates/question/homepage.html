@@ -1,4 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
-asa
+<div class="list-group">
+    {% for question in questions  %}
+    <a href="{{question.get_absolute_url}}" class="list-group-item list-group-item-action flex-column align-items-start">
+      <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1">{{question.title}}</h5>
+        <small class="text-muted">publish:{{question.publish|date:"Y/m/d"}}</small>
+      </div>
+      <p class="mb-1" id="homepage-question-body">{{question.body}}</p>
+      <small class="text-muted">tags : {{question.tags.all|join:","}}</small>
+    </a>
+    {% endfor %}
+  </div>
+  {% include 'utilities/pagination.html' %}
 {% endblock content %}
