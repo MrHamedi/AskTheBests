@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<p class="text-center"><strong>This line rendered as bold text.</strong></p>
+<table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Author</th>
+        <th scope="col">Score</th>
+        <th scope="col">view</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{question.author}}</td>
+        <td>{{question.score}}</td>
+        <td>{{question.views}}</td>
+      </tr>
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Publish</th>
+          <th scope="col">Update</th>
+          <th scope="col">Tags</th>
+        </tr>
+      </thead>
+      <tr>
+        <td>{{question.publish}}</td>
+        <td>{{question.update}}</td>
+        <td>{{question.tags.all|join:","}}</td>
+      </tr>
+    </tbody>
+  </table>
+    <section id="question-detail-body">
+      <p>{{question.body}}</p>
+    </section>
+{% endblock content %}

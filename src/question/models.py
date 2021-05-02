@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib import auth 
 from taggit.managers import TaggableManager
+from django.urls import reverse
+
 
 class Question(models.Model):
     """
@@ -18,6 +20,9 @@ class Question(models.Model):
     class Meta:
         ordering=("-publish",)
         unique_together=("author","publish")
+
+    def get_absolute_url(self):
+        return(reverse("question:questionDetail",args=[self.pk]))
 
     def __str__(self):
         return(self.title)

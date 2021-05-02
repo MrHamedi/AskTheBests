@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from .models import Question 
 # Create your views here.
-from django.views.generic import ListView 
+from django.views.generic import ListView,DetailView 
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 #The view of the homepage  
@@ -12,3 +13,11 @@ class HomePageView(ListView):
     paginate_by=1
 
 
+class QuestionDetailView(DetailView,):
+    """
+        This is the view of detail page of questions 
+    """
+    model=Question 
+    template_name="question/questionDetail.html"
+    context_object_name="question"
+    
