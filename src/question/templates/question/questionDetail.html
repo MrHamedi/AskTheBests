@@ -1,8 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
-<p class="text-center"><strong>This line rendered as bold text.</strong></p>
+<p class="text-center"><strong>{{question.title}}</strong></p>
 <table class="table">
-    <thead class="thead-dark">
+  <tbody>
+    <tr>
+      <th scope="col">Author</th>
+      <td>{{question.author}}</td>
+      <th scope="col">Score</th>
+      <td>{{question.score}}</td>
+      <th scope="col">view</th>
+      <td>{{question.views}}</td>
+    </tr>
+    <tr>
+      <th scope="col">Publish</th>
+      <td>{{question.publish}}</td>
+      <th scope="col">Update</th>
+      <td>{{question.update}}</td>
+      <th scope="col">Tags</th>
+      <td>{{question.tags.all|join:","}}</td>
+    </tr>
+  <!--   
+  <thead class="thead-dark">
       <tr>
         <th scope="col">Author</th>
         <th scope="col">Score</th>
@@ -28,8 +46,40 @@
         <td>{{question.tags.all|join:","}}</td>
       </tr>
     </tbody>
+  -->
   </table>
     <section id="question-detail-body">
       <p>{{question.body}}</p>
     </section>
+  <hr id="question-review-seprator">
+    <p class="text-center"><strong>Comments</strong></p>
+    {% for review in question.reviews.all  %}
+  <table class="table">
+    <thead class="thead-light">
+      <tr class="table-active">
+        <th scope="col">#</th>        
+        <th scope="col">Author</th>
+        <th scope="col">Publish</th>
+        <th scope="col">Update</th>
+        <th scope="col">Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td scope="row">{{forloop.counter}}</td>
+        <td scope="row">{{review.author}}</td>
+        <td scope="row">{{review.publish}}</td>
+        <td scope="row">{{review.update}}</td>
+        <td scope="row">{{review.score}}</td>
+      </tr>
+    </tbody>
+    </table>
+    <p id="question_detail_review_body">{{review.content}}</p>
+  {% endfor %}
+  
 {% endblock content %}
+
+<th>Author</th><td>{{review.author}}</td>
+<th>Score</th><td>{{question.score}}</td>
+<th>Publish</th><td>{{review.publish}}</td>
+<th>Update</th><td>{{question.update|date:"Y/m/d-H:i:s A"}}</td>

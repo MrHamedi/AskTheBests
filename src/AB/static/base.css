@@ -1,5 +1,11 @@
-#body{
-  height:85vh;
+#base-footer{
+  position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+#question-review-seprator{
+  border:2px double;
 }
 
 #homepage-question-body{
@@ -17,5 +23,11 @@
 #question-detail-body{
   padding:1%;
   margin:2%;
+
+}
+
+#question_detail_review_body{
+  padding:1%;
+  margin:1%;
 
 }
