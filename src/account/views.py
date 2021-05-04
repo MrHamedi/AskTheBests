@@ -29,3 +29,10 @@ def logout_view(request):
     user=request.user 
     logout(request)
     return(render(request,"account/logout.html"))
+
+
+def register(request):
+    if(request.method=="POST"):
+        pass 
+    else:
+        pass
