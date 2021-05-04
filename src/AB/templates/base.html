@@ -21,7 +21,13 @@
               </div>
               <ul class="nav navbar-nav">
                 <li class="active"><a href="{% url 'question:homepage' %}">Home</a></li>
-                <li><a href="#">Login</a></li>
+                <li>
+                {% if request.user %}
+                  <a href="{% url 'account:logout_view' %}">Logout</a>
+                {% else %}
+                <a href="{% url 'account:login_view' %}">Login</a>
+                {% endif %}
+                </li>
                 <li><a href="#">Sign up</a></li>
               </ul>
               <form class="navbar-form navbar-right" action="/action_page.php">
@@ -36,7 +42,7 @@
               </form>
             </div>
           </nav>
-          <section id="body">
+          <section id="content">
           {% block content %}
           {% endblock content %}
           </section>

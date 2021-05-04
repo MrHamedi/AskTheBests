@@ -10,7 +10,7 @@ class HomePageView(ListView):
     model=Question
     template_name="question/homepage.html"
     context_object_name="questions"
-    paginate_by=1
+    paginate_by=4
 
 
 class QuestionDetailView(DetailView,):

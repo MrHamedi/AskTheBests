@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+    <strong>
+        <p class="text-center">Thanks for using AB.</p>
+        <p class="text-center">Do you want to <a href="{% url 'account:login_view' %}">login</a> again?</p>
+    </strong>   
+    {% endblock content %}

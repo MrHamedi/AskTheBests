@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="login-form" class="text-center p-3">
+     <form method="POST" >
+            {{form.as_p}}
+            {% csrf_token %}
+            <input class="hidden" name="next" value="{{request.GET.next}}">
+            <input type="submit" value="login">
+        </form>
+</div>
+    {% if messages %}
+        {% for message in messages %}
+            <strong><p class="text-center text-danger">{{message}}</p></strong>
+        {% endfor %}
+    {% endif %}
+{% endblock content %}

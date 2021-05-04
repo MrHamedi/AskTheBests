@@ -37,6 +37,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'taggit',
+    'account.apps.AccountConfig',
     'question.apps.QuestionConfig',
     'django.contrib.admin',
     'django.contrib.auth',
