@@ -32,7 +32,17 @@
 
 }
 
-#login-form{
+#login-form,#register-form{
   margin-top:10%;
 }
 
+.register-form-label{
+  display:block;  
+}   
+
+#register-form-btn{
+  display:block;
+  border-radius:2%;
+  margin-left:auto;
+  margin-right:auto;
+}

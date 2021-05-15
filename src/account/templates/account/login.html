@@ -4,7 +4,7 @@
      <form method="POST" >
             {{form.as_p}}
             {% csrf_token %}
-            <input class="hidden" name="next" value="{{request.GET.next}}">
+            <input class="d-none" name="next" value="{{request.GET.next}}">
             <input type="submit" value="login">
         </form>
 </div>

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+    <form method="post" action="." class="text-center p-3" id="register-form">
+        {% for field in form %}
+            <label class="register-form-label">{{field.label}}</label>
+            {{field}}
+        {% endfor %}
+        {% csrf_token %}
+        <input type="submit" value="register" id="register-form-btn"> 
+        {% for error in form.non_field_errors %}    
+            <p class="text-danger p-3"><i>{{error}}</i></p>
+        {% endfor %}
+
+    </form>
+{% endblock content %}
