@@ -5,15 +5,17 @@ from django.views.generic import ListView,DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-#The view of the homepage  
 class HomePageView(ListView):
+    """
+        This is the view of the homepage
+    """
     model=Question
     template_name="question/homepage.html"
     context_object_name="questions"
     paginate_by=4
 
 
-class QuestionDetailView(DetailView,):
+class QuestionDetailView(DetailView):
     """
         This is the view of detail page of questions 
     """

@@ -13,7 +13,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 30ch
+  max-width: 30ch;
 }
 
 #pagination{
@@ -29,20 +29,31 @@
 #question_detail_review_body{
   padding:1%;
   margin:1%;
+  margin-bottom:7.5%;
 
 }
 
-#login-form,#register-form{
+#register-form{
+  margin:5% 0 5% 0;
+}
+
+
+#login-form{
   margin-top:10%;
 }
 
-.register-form-label{
+.register-form-label,.password-reset-form-label{
   display:block;  
 }   
 
-#register-form-btn{
+#password-reset-form-btn,#register-form-btn{
   display:block;
-  border-radius:2%;
+  border-radius:5%;
   margin-left:auto;
   margin-right:auto;
+  margin-top:1%;
+}
+
+#password_reset_form{
+  margin-top:10%;  
 }
