@@ -24,11 +24,3 @@ class register_form(forms.ModelForm):
             raise(forms.ValidationError("Passwords does not match!!!"))
         return(cd)
 
-
-class PasswordResetForm(forms.Form):
-    email=forms.EmailField(label="Email Adress")
-
-class PasswordResetCodeForm(forms.Form):
-	code=forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'form-control' ,'autocomplete': 'off','pattern':'[0-9]+', 'title':'Enter numbers Only '}))
-
-

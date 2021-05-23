@@ -4,7 +4,7 @@
     <p><strong>Please fill this form out to sign up.</strong></p>
     <form method="post" action=".">
         {% for field in form %}
-            <label class="register-form-label">{{field.label}}</label>
+            <span class="register-form-label">{{field.label}}</span>
             {{field}}
         {% endfor %}
         {% csrf_token %}

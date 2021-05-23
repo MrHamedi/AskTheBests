@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import login,authenticate,logout
-from .forms import login_form,register_form,PasswordResetForm,PasswordResetCodeForm
+from .forms import login_form,register_form
 from django.contrib import messages
 from django.urls import reverse
 from django.utils.safestring import mark_safe
@@ -55,3 +55,5 @@ def register_view(request):
         form=register_form()
     return(render(request,"account/register_page.html",{"form":form}))
 
+
+  

@@ -42,11 +42,11 @@
   margin-top:10%;
 }
 
-.register-form-label,.password-reset-form-label{
+.register-form-label,.password-reset-form-label,.password-change-form-label{
   display:block;  
 }   
 
-#password-reset-form-btn,#register-form-btn{
+#password-reset-form-btn,#register-form-btn,#password-change-form-btn{
   display:block;
   border-radius:5%;
   margin-left:auto;
