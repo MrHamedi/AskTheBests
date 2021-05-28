@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import login,authenticate,logout
 from .forms import login_form,register_form
@@ -9,6 +9,12 @@ from .utils import database_checker
 from django.views.generic import FormView,TemplateView
 from django.urls import reverse
 from django.contrib.auth.views import  PasswordResetView
+import random 
+from .forms  import account_activator
+from datetime import datetime 
+from django.utils import timezone
+from django.core.mail import send_mail
+import json
 
 
 def login_view(request):
@@ -55,5 +61,50 @@ def register_view(request):
         form=register_form()
     return(render(request,"account/register_page.html",{"form":form}))
 
+"""
+    This function will create random number and send it to client email
+"""
 
-  
+def code_sender_view(request,username):
+    user=User.objects.get(username=username)
+    code=""
+    #We create the activision code 
+    for i in range(0,6):
+        number=random.randrange(0,9)
+        code+=str(number)
+    profile=user.profile
+    profile.code=code
+    profile.save()
+    #We send code to client email 
+    subject="Account activision code from AB site."
+    message=f"Hi, We have received a request to make an account on your email adress \n This is your account activision code : {code} \n If this was not your request please ignore this message. \n Please avoid from sharing this message with anyone \n Thank you for your time . \t AB Group"
+    send_mail(subject,message,"AB Group",[user.email],fail_silently=False)
+    cowndown=True
+    return(redirect("account:account_activator_view",username,cowndown))
+
+
+"""
+    This view will call code_sender function and check the code that will provide by user
+"""
+def account_activator_view(request,username,countdown=False):
+    account=get_object_or_404(User,username=username)
+    js_count=json.dumps(countdown)
+    if(request.method=="POST"):
+        form=account_activator(data=request.POST)
+        if(form.is_valid()):
+            code=form.cleaned_data["code"]
+            #if(user.profile.code_limit)
+            now=timezone.now()
+            if(now < account.profile.code_limit_time):
+                messages.error(request,"The activation code is expired.")
+            else:    
+                if(code==account.profile.code):
+                    account.is_active=True 
+                    account.save()
+                    messages.success(request,"Account activated successfully.Now you can login into your account.")
+                else:
+                    messages.error(request,"The inserted activation code is not right.")
+    else:
+        form=account_activator()  
+    return(render(request,"account/registration/account_activator.html",{"account":account,"form":form,"countdown":js_count}))
+

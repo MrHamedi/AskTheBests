@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'account/account.css' %}" >
+{% endblock css %}
+{% block content %}
+
+<div class="text-center mt-5" id="account_activator_fields">
+<section id="account_activator_field"><label>Username </label><input value="{{account.username}}" disabled></section>
+<section id="account_activator_field"><label>entered email</label><input value="{{account.email}}" id="account_activator_email" disabled></section>
+<form method="POST"  action=".">     
+    {% csrf_token %}
+    {% for field in form %}
+        <section id="account_activator_field" ><label>{{field.label}}</label>{{field}}</section>
+    {% endfor %}
+    <input type="submit" value="activate" class="btn btn-dark">
+    <button id="account_activator_btn" onClick="code_sender()" class="btn btn-dark">send code</button>
+</form>
+<section class="mt-5">
+{% if messages %}
+    {% for message in messages %}
+        <section class="{{message.tags}}">{{message}}</section>
+    {% endfor %}
+{% endif %}
+</section>
+</div>
+<table class="table table-dark" id="timer_table">
+<th>Code will expire at</th>
+<tr>
+    <th>minutes</th>
+</tr>
+<tr>
+    <td id="minutes">0</td>
+</tr>
+<tr>
+    <th>seconds</th>
+</tr>
+<tr>
+    <td id="seconds">0</td>
+</tr>
+</table>
+<script>
+    function code_sender(){
+        window.location.href="/account/account_activator/email_sender/{{account.username}}"
+    }
+    /*
+        We make email field as wide as email in it
+    */
+    var email_field = document.getElementById("account_activator_email"); 
+    email_field_size_changer()
+    function email_field_size_changer(){
+        var email_length=(email_field.value+"   ").length
+        email_field.style.width=email_length.toString()+"ch"
+    }
+    /*
+        calculate and provide the coundown until the activation code will get expired.
+    */
+    countdown={% autoescape off %}{{countdown}}{% endautoescape %}
+    if(countdown==="True"){
+    var countDownDate = new Date()
+    var now = new Date()
+    countDownDate.setMinutes (now.getMinutes() + 5 );
+	alert (countDownDate);
+    // Update the count down every 1 second
+    var x = setInterval(function() {
+    // Get today's date and time
+    var now = new Date().getTime();
+    // Find the distance between now and the count down date
+    var distance = countDownDate - now;
+    // Time calculations for days, hours, minutes and seconds
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    // Output the result in an element with id="demo"
+    document.getElementById("minutes").innerHTML =minutes;
+    document.getElementById("seconds").innerHTML =seconds;;
+    // If the count down is over, write some text 
+    
+     if (distance < 0) {
+        clearInterval(x);
+        document.getElementById("minutes").innerHTML = "EXPIRED";
+        document.getElementById("seconds").innerHTML = "EXPIRED";
+        alert("Done")
+     }
+    }, 1000);
+    }
+</script>
+{% endblock content %}

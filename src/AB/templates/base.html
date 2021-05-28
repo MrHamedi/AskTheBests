@@ -12,12 +12,11 @@
         <script src="{% static 'js/bootstrap.min.js' %}"></script>
         <script src="{% static 'js/jquery.min.js' %}"></script>
         <script src="{% static 'js/popper.min.js' %}"></script> 
+        {% block css %}
+        {% endblock css %}
     </head>
     <body>
-
-
-
-      <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
         <!-- Brand -->
         <a class="navbar-brand" href="{% url 'question:homepage' %}">AB</a>
       
@@ -41,7 +40,7 @@
               <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search" name="search">
                 <div class="input-group-btn">
-                  <button class="btn btn-default" type="submit">                     
+                  <button class="btn btn-default" type="submit" id="search_btn">                     
                     <i>Search</i>
                   </button>
                 </div>
@@ -57,9 +56,9 @@
           </section>
           <footer class="bg-light text-center text-lg-start" id="base-footer">
             <!-- Copyright -->
-            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.924);">
-              © 2020 Copyright:
-              <a class="text-dark" href="mailto:ahmadihamed231@gmail.com">ahmadihamed231@gmail.com</a>
+            <div class="text-dark  text-center p-3" style="background-color: rgba(0, 0, 0, 0.924);">
+              © 2020 Copyright :
+              <a class="text-muted" href="mailto:ahmadihamed231@gmail.com">ahmadihamed231@gmail.com</a>
             </div>
             <!-- Copyright -->
           </footer>

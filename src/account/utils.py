@@ -1,5 +1,5 @@
 from django.apps import apps 
-
+from django.core.mail import send_mail 
 
 def database_checker(app_name,model_name,**kwargs):
     """
@@ -13,3 +13,4 @@ def database_checker(app_name,model_name,**kwargs):
     if(obj.count()==0):
         return(False)
     return(True)
+

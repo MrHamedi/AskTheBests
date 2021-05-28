@@ -8,6 +8,11 @@
   border:2px double;
 }
 
+#search_btn:hover{
+  color:white;
+  background-color:rgba(48, 44, 44, 0.993);
+}
+
 #homepage-question-body{
   display:inline-block;
   white-space: nowrap;
@@ -31,29 +36,4 @@
   margin:1%;
   margin-bottom:7.5%;
 
-}
-
-#register-form{
-  margin:5% 0 5% 0;
-}
-
-
-#login-form{
-  margin-top:10%;
-}
-
-.register-form-label,.password-reset-form-label,.password-change-form-label{
-  display:block;  
-}   
-
-#password-reset-form-btn,#register-form-btn,#password-change-form-btn{
-  display:block;
-  border-radius:5%;
-  margin-left:auto;
-  margin-right:auto;
-  margin-top:1%;
-}
-
-#password_reset_form{
-  margin-top:10%;  
 }

@@ -1,4 +1,8 @@
 {% extends "base.html" %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'account/account.css' %}" >
+{% endblock css %}
 {% block content %}
 <div id="login-form" class="text-center p-3">
     <p><strong>Please fill this form to login.</strong></p>
@@ -6,8 +10,10 @@
             {{form.as_p}}
             {% csrf_token %}
             <input class="d-none" name="next" value="{{request.GET.next}}">
-            <input type="submit" value="login">
+            <input type="submit" value="login" class="btn btn-dark">
         </form>
+        <p class="pt-2"><a href="{% url "account:password_reset_view" %}">Forgot password?</a></p>
+        <p class="pt-1">You dont have an account ? sign up <a href="{% url "account:register_view" %}">here</a>.</p>
 </div>
     {% if messages %}
         {% for message in messages %}

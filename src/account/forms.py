@@ -24,3 +24,8 @@ class register_form(forms.ModelForm):
             raise(forms.ValidationError("Passwords does not match!!!"))
         return(cd)
 
+
+class account_activator(forms.Form):
+    code=forms.CharField(label="activation code",max_length=6)
+
+    
