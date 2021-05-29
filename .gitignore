@@ -2,7 +2,8 @@
 /AB_env/
 
 #Ignore media files 
-media/ .gitkeep
+src/media/
+src/media/ .gitkeep
 
 #Ignore bytecodes 
 __pycache__/
