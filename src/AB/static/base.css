@@ -1,10 +1,12 @@
 #base-footer{
   position: fixed;
-    bottom: 0;
-    width: 100%;
+  bottom:0px;
+  width: 100%;
+  margin-left:2%
+  
 }
 
-#question-review-seprator{
+#question-comment-seprator{
   border:2px double;
 }
 
@@ -31,9 +33,6 @@
 
 }
 
-#question_detail_review_body{
+#question_detail_comment_body{
   padding:1%;
-  margin:1%;
-  margin-bottom:7.5%;
-
 }

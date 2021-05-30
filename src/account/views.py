@@ -56,7 +56,7 @@ def register_view(request):
                 user.set_password(cd["password"])
                 user.is_active=False
                 user.save()
-                return(("account:login_view"))
+                return(redirect("account:account_activator_view",user.username))
     else:
         form=register_form()
     return(render(request,"account/register_page.html",{"form":form}))

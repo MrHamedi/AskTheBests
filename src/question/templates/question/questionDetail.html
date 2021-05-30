@@ -1,4 +1,8 @@
 {% extends "base.html" %}
+{% load static %}
+{% block css %}
+  <link rel="stylesheet" href="{% static 'question/question.css' %}">
+{% endblock css %}
 {% block content %}
 <p class="text-center"><strong>{{question.title}}</strong></p>
 <table class="table">
@@ -23,9 +27,9 @@
     <section id="question-detail-body">
       <p>{{question.body}}</p>
     </section>
-  <hr id="question-review-seprator">
+  <hr id="question-comment-seprator">
     <p class="text-center"><strong>Comments</strong></p>
-    {% for review in question.reviews.all  %}
+{% for comment in question.comments.all  %}
   <table class="table">
     <thead class="thead-light">
       <tr class="table-active">
@@ -39,14 +43,19 @@
     <tbody>
       <tr>
         <td scope="row">{{forloop.counter}}</td>
-        <td scope="row">{{review.author}}</td>
-        <td scope="row">{{review.publish}}</td>
-        <td scope="row">{{review.update}}</td>
-        <td scope="row">{{review.score}}</td>
+        <td scope="row">{{comment.author}}</td>
+        <td scope="row">{{comment.publish}}</td>
+        <td scope="row">{{comment.update}}</td>
+        <td scope="row">{{comment.score}}</td>
       </tr>
     </tbody>
     </table>
-    <p id="question_detail_review_body">{{review.content}}</p>
+    <p id="question_detail_comment_body">{{comment.content}}</p>
   {% endfor %}
-  
+  <p>Your answer</p>
+  <form method="POST" action="{% url 'question:comment_form' %}" id="comment-form">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <input type="submit" value="save" >
+  </form>
 {% endblock content %}

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Question,Review
+from .models import Comment, Question,Comment
 
 
 class QuestionAdmin(admin.ModelAdmin):
@@ -16,9 +16,9 @@ class QuestionAdmin(admin.ModelAdmin):
     )
 
 
-class ReviewAdmin(admin.ModelAdmin):
+class CommentAdmin(admin.ModelAdmin):
     """
-            This is the admin class for Review model 
+        This is the admin class for Comment model 
     """
     readonly_fields=("update","publish")
     list_display=("question","author","publish","update")
@@ -36,4 +36,4 @@ class ReviewAdmin(admin.ModelAdmin):
 
 # Register your models here.
 admin.site.register(Question,QuestionAdmin)
-admin.site.register(Review,ReviewAdmin)
+admin.site.register(Comment,CommentAdmin)

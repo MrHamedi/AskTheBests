@@ -29,14 +29,14 @@ class Question(models.Model):
         return(self.title)
 
 
-class Review(models.Model):
-        #This model is for client reviews on question
-    author=models.ForeignKey(auth.get_user_model(),on_delete=models.SET_DEFAULT ,default=1,help_text="The author of review")
-    question=models.ForeignKey(Question,on_delete=models.PROTECT,help_text="The question that this review has been written for",null=True,related_name="reviews")
-    content=models.TextField()
-    score=models.IntegerField(help_text="The score of this review")    
-    publish=models.DateTimeField(help_text="The publish time of this review",verbose_name="Publish time",auto_now_add=True)
-    update=models.DateTimeField(help_text="The time of the last editting of this review",verbose_name="Last update time",auto_now=True)
+class Comment(models.Model):
+    #This model is for client comments on question
+    author=models.ForeignKey(auth.get_user_model(),on_delete=models.SET_DEFAULT ,default=1,help_text="The author of comment")
+    question=models.ForeignKey(Question,on_delete=models.PROTECT,help_text="The question that this comment has been written for",null=True,related_name="comments")
+    content=models.TextField(verbose_name="Comment")
+    score=models.IntegerField(help_text="The score of this comment")    
+    publish=models.DateTimeField(help_text="The publish time of this comment",verbose_name="Publish time",auto_now_add=True)
+    update=models.DateTimeField(help_text="The time of the last editting of this comment",verbose_name="Last update time",auto_now=True)
 
     class Meta:
         ordering=("publish",)
