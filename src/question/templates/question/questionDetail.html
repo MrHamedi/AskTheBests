@@ -53,7 +53,7 @@
     <p id="question_detail_comment_body">{{comment.content}}</p>
   {% endfor %}
   <p>Your answer</p>
-  <form method="POST" action="{% url 'question:comment_form' %}" id="comment-form">
+  <form method="POST" action="{% url 'question:comment_form' question.id %}" id="comment-form">
     {% csrf_token %}
     {{ comment_form.as_p }}
     <input type="submit" value="save" >

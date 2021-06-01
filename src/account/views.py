@@ -1,3 +1,4 @@
+from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import login,authenticate,logout
@@ -18,6 +19,7 @@ import json
 
 
 def login_view(request):
+    next_page=request.POST.get("next")
     if(request.method=="POST"):
         form=login_form(data=request.POST)
         if(form.is_valid()):
@@ -26,7 +28,10 @@ def login_view(request):
             if(user):
                 if(user.is_active):
                     login(request,user)
-                    return(redirect("question:homepage"))
+                    if(next_page):
+                        return(HttpResponseRedirect(next_page))
+                    else:
+                        return(redirect("question:homepage"))
 
             else:
                 messages.error(request,mark_safe("User does not exist ! <br> please check your password and username."))

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css %}
+    <linK href="{% static 'question/question.css' %}" rel="stylesheet">
+{% endblock css %}
+{% block content %}
+    <div id="question-form-container" class="text-center  mt-5">
+        <p><strong>Please fill this form to submit a question</strong></p> 
+        <form id="question-form" method="POST" action=".">
+            {% for field in form %}
+                {% csrf_token %}
+                <label  class="mt-3 d-block">{{field.label}}</label>
+                {% if field.help_text %}
+                    <i class="d-block">(hint : {{field.help_text}})</i>
+                {% endif %}
+                {{field}}
+            {% endfor %}
+                <input type="submit" value="send" class="btn btn-dark" id="question-form-btn">
+        </form>
+    </div>
+
+{% endblock content %}

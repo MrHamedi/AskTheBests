@@ -14,7 +14,7 @@ class Question(models.Model):
     publish=models.DateTimeField(auto_now_add=True,help_text="The publish date of post")
     update=models.DateTimeField(verbose_name="The last update",auto_now=True)
     author=models.ForeignKey(auth.get_user_model(),on_delete=models.CASCADE,related_name="questions")
-    score=models.IntegerField(help_text="The score of this question")
+    score=models.IntegerField(help_text="The score of this question",default=0)
     slug=models.SlugField(max_length=200,unique=True)
     tags=TaggableManager()
 
@@ -28,9 +28,17 @@ class Question(models.Model):
     def __str__(self):
         return(self.title)
 
+    def slug_maker(self):
+        """
+            This function will create object slug in CreateView
+        """
+        slug=self.title+self.author.username+str(self.id)
+        return(slug)
 
 class Comment(models.Model):
-    #This model is for client comments on question
+    """
+        This model is for client comments on question
+    """
     author=models.ForeignKey(auth.get_user_model(),on_delete=models.SET_DEFAULT ,default=1,help_text="The author of comment")
     question=models.ForeignKey(Question,on_delete=models.PROTECT,help_text="The question that this comment has been written for",null=True,related_name="comments")
     content=models.TextField(verbose_name="Comment")
@@ -39,7 +47,7 @@ class Comment(models.Model):
     update=models.DateTimeField(help_text="The time of the last editting of this comment",verbose_name="Last update time",auto_now=True)
 
     class Meta:
-        ordering=("publish",)
+        ordering=("-publish",)
 
     def __str__(self):
         return(self.content)
