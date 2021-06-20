@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
 {% block css %}
+  <script src="{% static 'question/question.js' %}"></script>
   <link rel="stylesheet" href="{% static 'question/question.css' %}">
 {% endblock css %}
 {% block content %}
+{{status}}
 <p class="text-center"><strong>{{question.title}}</strong></p>
 <table class="table">
   <tbody>
@@ -11,7 +13,17 @@
       <th scope="col">Author</th>
       <td>{{question.author}}</td>
       <th scope="col">Score</th>
-      <td>{{question.score}}</td>
+      <td>{{question.score}} &nbsp;
+      {% if status == "liked" %} 
+        <button id="like" class="btn btn-light"><a href="{% url 'question:liker_view' pk=question.id order='liked' %}"><img id="active_like_image" src="{% static 'question/a_like.png' %}"></a></button>
+        <button class="btn btn-light" id="dis_like"><a href="{% url 'question:liker_view' pk=question.id order='disliked' %}"><img id="dis_like_image" src="{% static 'question/dislike.png' %}"></a></button>
+      {% elif status == "disliked" %}
+        <button id="like" class="btn btn-light"  ><a href="{% url 'question:liker_view' pk=question.id order='liked' %}"><img id="like_image" src="{% static 'question/like.png' %}"></a></button>
+        <button class="btn btn-light" id="dis_like" ><a href="{% url 'question:liker_view' pk=question.id order='disliked' %}"><img id="dis_like_image" src="{% static 'question/a_dislike.png' %}"></a></button>      
+      {% else %}
+        <button id="like" class="btn btn-light"  ><a href="{% url 'question:liker_view' pk=question.id order='liked' %}"><img id="active_like_image" src="{% static 'question/like.png' %}"></a></button>
+        <button class="btn btn-light" id="dis_like" ><a href="{% url 'question:liker_view' pk=question.id order='disliked' %}"><img id="dis_like_image" src="{% static 'question/dislike.png' %}"></a></button>
+      {% endif %}
       <th scope="col">view</th>
       <td>{{question.views}}</td>
     </tr>
@@ -56,6 +68,6 @@
   <form method="POST" action="{% url 'question:comment_form' question.id %}" id="comment-form">
     {% csrf_token %}
     {{ comment_form.as_p }}
-    <input type="submit" value="save" >
+    <input type="submit" value="save" class="btn btn-dark">
   </form>
 {% endblock content %}

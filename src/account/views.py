@@ -12,10 +12,11 @@ from django.urls import reverse
 from django.contrib.auth.views import  PasswordResetView
 import random 
 from .forms  import account_activator
-from datetime import datetime 
+import datetime
 from django.utils import timezone
 from django.core.mail import send_mail
 import json
+from .models import Profile
 
 
 def login_view(request):
@@ -61,6 +62,8 @@ def register_view(request):
                 user.set_password(cd["password"])
                 user.is_active=False
                 user.save()
+                profile=Profile(user=user)
+                profile.save()
                 return(redirect("account:account_activator_view",user.username))
     else:
         form=register_form()
@@ -76,8 +79,9 @@ def code_sender_view(request,username):
     #We create the activision code 
     for i in range(0,6):
         number=random.randrange(0,9)
-        code+=str(number)
+        code+=str(number)    
     profile=user.profile
+    profile.code_limit_time=datetime.datetime.now()+datetime.timedelta(minutes=5)
     profile.code=code
     profile.save()
     #We send code to client email 
@@ -100,7 +104,9 @@ def account_activator_view(request,username,countdown=False):
             code=form.cleaned_data["code"]
             #if(user.profile.code_limit)
             now=timezone.now()
-            if(now < account.profile.code_limit_time):
+            print(f"\n\n\n {now}  --- {account.profile.code_limit_time} \n\n\n")
+            if(now > account.profile.code_limit_time):
+
                 messages.error(request,"The activation code is expired.")
             else:    
                 if(code==account.profile.code):

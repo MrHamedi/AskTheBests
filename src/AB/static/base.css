@@ -1,10 +1,19 @@
-#base-footer{
-  position:relative;
-  bottom:0px;
-  width: 100%;
-  margin-top:2%;
-  
+#content{
+  height:100vh;
 }
+#base-footer{
+  bottom:0px;
+  left:0px;
+  position:fixed;
+  width:100%;
+  margin-top:10%;
+}
+
+header{
+  min-height:50px;
+  background:lightcyan;
+   }
+
 
 #question-comment-seprator{
   border:2px double;
@@ -25,6 +34,8 @@
 
 #pagination{
   text-align:center;
+  margin:auto auto 0 auto;
+
 }
 
 #question-detail-body{
@@ -36,3 +47,4 @@
 #question_detail_comment_body{
   padding:1%;
 }
+

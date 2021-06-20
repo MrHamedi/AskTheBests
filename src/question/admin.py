@@ -12,7 +12,7 @@ class QuestionAdmin(admin.ModelAdmin):
     list_filter=("author","score")
     fieldsets=(
             (None,{"fields":("author","slug","publish","update","tags")}),
-            ("Info",{"classes":("collapse",),"fields":("score","title","body")})
+            ("Info",{"classes":("collapse",),"fields":("score","title","body","liked_by","disliked_by")})
     )
 
 

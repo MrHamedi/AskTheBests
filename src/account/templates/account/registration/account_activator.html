@@ -15,7 +15,7 @@
         <section id="account_activator_field" ><label>{{field.label}}</label>{{field}}</section>
     {% endfor %}
     <input type="submit" value="activate" class="btn btn-dark">
-    <button id="account_activator_btn" onClick="code_sender()" class="btn btn-dark">send code</button>
+    <button type="button" id="account_activator_btn" onClick="code_sender()" class="btn btn-dark">send code</button>
 </form>
 <section class="mt-5">
 {% if messages %}
@@ -61,7 +61,6 @@
     var countDownDate = new Date()
     var now = new Date()
     countDownDate.setMinutes (now.getMinutes() + 5 );
-	alert (countDownDate);
     // Update the count down every 1 second
     var x = setInterval(function() {
     // Get today's date and time

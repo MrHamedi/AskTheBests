@@ -3,7 +3,7 @@ from django.contrib import auth
 from taggit.managers import TaggableManager
 from django.urls import reverse
 from django.contrib.auth.models import User 
-
+from account.models import Profile 
 
 class Question(models.Model):
     """
@@ -17,6 +17,9 @@ class Question(models.Model):
     score=models.IntegerField(help_text="The score of this question",default=0)
     slug=models.SlugField(max_length=200,unique=True)
     tags=TaggableManager()
+    liked_by=models.ManyToManyField(Profile,related_name="liked_by",blank=True)
+    disliked_by=models.ManyToManyField(Profile,related_name="disliked_by",blank=True)
+
 
     class Meta:
         ordering=("-publish",)
