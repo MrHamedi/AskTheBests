@@ -26,7 +26,7 @@ class CommentAdmin(admin.ModelAdmin):
     search_fields=("content","pk")
     fieldsets=(
         (None,{"fields":("question","publish","update")}),
-        ("Info",{"fields":("score","content"),"classes":"collapse"})
+        ("Info",{"fields":("score","content","liked_by","disliked_by"),"classes":"collapse"})
     )
 
     class Meta:

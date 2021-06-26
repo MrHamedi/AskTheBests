@@ -38,6 +38,13 @@ class Question(models.Model):
         slug=self.title+self.author.username+str(self.id)
         return(slug)
 
+
+    @property
+    def score_counter(self):
+        score=self.liked_by.count()-self.disliked_by.count()
+        self.score=score
+        return(self.score)
+
 class Comment(models.Model):
     """
         This model is for client comments on question
@@ -48,6 +55,9 @@ class Comment(models.Model):
     score=models.IntegerField(help_text="The score of this comment")    
     publish=models.DateTimeField(help_text="The publish time of this comment",verbose_name="Publish time",auto_now_add=True)
     update=models.DateTimeField(help_text="The time of the last editting of this comment",verbose_name="Last update time",auto_now=True)
+    liked_by=models.ManyToManyField(Profile,related_name="comment_liked_by",blank=True)
+    disliked_by=models.ManyToManyField(Profile,related_name="comment_disliked_by",blank=True)
+
 
     class Meta:
         ordering=("-publish",)
@@ -55,6 +65,8 @@ class Comment(models.Model):
     def __str__(self):
         return(self.content)
 
-
-
-
+    @property
+    def score_counter(self):
+        score=self.liked_by.count()-self.disliked_by.count()
+        self.score=score
+        return(self.score)

@@ -1,11 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
 {% block css %}
-  <script src="{% static 'question/question.js' %}"></script>
   <link rel="stylesheet" href="{% static 'question/question.css' %}">
 {% endblock css %}
 {% block content %}
-{{status}}
 <p class="text-center"><strong>{{question.title}}</strong></p>
 <table class="table">
   <tbody>
@@ -13,7 +11,7 @@
       <th scope="col">Author</th>
       <td>{{question.author}}</td>
       <th scope="col">Score</th>
-      <td>{{question.score}} &nbsp;
+      <td>{{question.score_counter}} &nbsp;
       {% if status == "liked" %} 
         <button id="like" class="btn btn-light"><a href="{% url 'question:liker_view' pk=question.id order='liked' %}"><img id="active_like_image" src="{% static 'question/a_like.png' %}"></a></button>
         <button class="btn btn-light" id="dis_like"><a href="{% url 'question:liker_view' pk=question.id order='disliked' %}"><img id="dis_like_image" src="{% static 'question/dislike.png' %}"></a></button>
@@ -50,6 +48,7 @@
         <th scope="col">Publish</th>
         <th scope="col">Update</th>
         <th scope="col">Score</th>
+        <th scope="col">Opinion</th>
       </tr>
     </thead>
     <tbody>
@@ -58,7 +57,19 @@
         <td scope="row">{{comment.author}}</td>
         <td scope="row">{{comment.publish}}</td>
         <td scope="row">{{comment.update}}</td>
-        <td scope="row">{{comment.score}}</td>
+        <td scope="row">{{comment.score_counter}}</td>
+        <td  scope="row">      
+        {% if request.user.profile in comment.liked_by.all %} 
+          <button id="like" class="btn btn-light"><a href="{% url 'question:comment_liker_view' pk=comment.id order='liked' %}"><img id="active_like_image" src="{% static 'question/a_like.png' %}"></a></button>
+          <button class="btn btn-light" id="dis_like"><a href="{% url 'question:comment_liker_view' pk=comment.id order='disliked' %}"><img id="dis_like_image" src="{% static 'question/dislike.png' %}"></a></button>
+        {% elif request.user.profile  in comment.disliked_by.all %}
+          <button id="like" class="btn btn-light"  ><a href="{% url 'question:comment_liker_view' pk=comment.id order='liked' %}"><img id="like_image" src="{% static 'question/like.png' %}"></a></button>
+          <button class="btn btn-light" id="dis_like" ><a href="{% url 'question:comment_liker_view' pk=comment.id order='disliked' %}"><img id="dis_like_image" src="{% static 'question/a_dislike.png' %}"></a></button>      
+        {% else %}
+          <button id="like" class="btn btn-light"  ><a href="{% url 'question:comment_liker_view' pk=comment.id order='liked' %}"><img id="active_like_image" src="{% static 'question/like.png' %}"></a></button>
+          <button class="btn btn-light" id="dis_like" ><a href="{% url 'question:comment_liker_view' pk=comment.id order='disliked' %}"><img id="dis_like_image" src="{% static 'question/dislike.png' %}"></a></button>
+        {% endif %}
+      </td>
       </tr>
     </tbody>
     </table>

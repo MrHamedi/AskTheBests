@@ -7,6 +7,7 @@ from django.urls import reverse
 from .models import Comment
 from django.contrib.auth.decorators import login_required
 from .utility import like_status_finder
+from django.db.models import Q
 
 
 class HomePageView(ListView):
@@ -19,6 +20,14 @@ class HomePageView(ListView):
     paginate_by=5
 
 
+def searched_list_view(request,value):
+    """
+        This view will filter question by client search 
+    """
+    questions=Question.objects.filter(Q(title__icontains=value) | Q(body__icontains=value))
+
+
+@login_required
 def question_detail_view(request,pk): 
     """
         This view will display the question detail and its comments with a form for makeing comment on question
@@ -99,6 +108,36 @@ def liker_view(request,order,pk):
     return(redirect("question:questionDetail",question.id))
 
             
+
+@login_required
+def comment_liker_view(request,order,pk):
+    """
+        This view will change the interest status of user to question. 
+    """
+    account=request.user.profile 
+    comment=get_object_or_404(Comment,pk=pk)
+    dislikers=comment.disliked_by.all()
+    likers=comment.liked_by.all()
+    if(order=="liked"):        
+        if(account in likers):
+            comment.liked_by.remove(account)          
+        elif(account in dislikers):
+            comment.disliked_by.remove(account)  
+            comment.liked_by.add(account)
+        else:
+            comment.liked_by.add(account)
+        if(account in dislikers):
+            comment.disliked_by.remove(account)          
+    elif(order=="disliked"):
+        if(account in dislikers):
+            comment.disliked_by.remove(account)
+        elif(account in likers):
+            comment.liked_by.remove(account)
+            comment.disliked_by.add(account)
+        else:
+            comment.disliked_by.add(account)
+
+    return(redirect("question:questionDetail",comment.question.id))
 
 
 

@@ -12,6 +12,7 @@
         <script src="{% static 'js/bootstrap.min.js' %}"></script>
         <script src="{% static 'js/jquery.min.js' %}"></script>
         <script src="{% static 'js/popper.min.js' %}"></script> 
+        <script src="{% static 'js/searcher.js' %}"></script>
         {% block css %}
         {% endblock css %}
     </head>
@@ -39,9 +40,9 @@
             <a class="nav-link" href="{% url 'account:register_view' %}">Sign up</a>
           </li>
           </ul>
-            <form class="navbar-form ml-auto" action="/action_page.php">
+            <form class="navbar-form ml-auto">
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search" name="search">
+                <input type="text" class="form-control" placeholder="Search" id="search_field" name="search">
                 <div class="input-group-btn">
                   <button class="btn btn-default" type="submit" id="search_btn">                     
                     <i>Search</i>
