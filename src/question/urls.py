@@ -6,7 +6,7 @@ app_name="question"
 
 
 urlpatterns = [
-    path("", HomePageView.as_view(),name="homepage"),
+    path("", HomePageView,name="homepage"),
     path("question/<int:pk>/",question_detail_view,name="questionDetail"),
     path("question/<int:pk>/comment_form/",comment_form,name="comment_form"),
     path("question/<int:pk>/<str:order>/liker/",liker_view,name="liker_view"),

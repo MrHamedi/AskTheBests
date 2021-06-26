@@ -8,23 +8,30 @@ from .models import Comment
 from django.contrib.auth.decorators import login_required
 from .utility import like_status_finder
 from django.db.models import Q
+from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 
 
-class HomePageView(ListView):
+def HomePageView(request,search=None):
     """
         This is the view of the homepage
     """
-    model=Question
-    template_name="question/homepage.html"
-    context_object_name="questions"
-    paginate_by=5
-
-
-def searched_list_view(request,value):
-    """
-        This view will filter question by client search 
-    """
-    questions=Question.objects.filter(Q(title__icontains=value) | Q(body__icontains=value))
+    search=request.GET.get("search")
+    if(search):
+        questions=Question.objects.filter(Q(title__icontains=search) | Q(body__icontains=search))
+    else:
+        questions=Question.objects.all()
+    paginator=Paginator(questions,5)
+    page=request.GET.get('page')
+    try:
+        questions=paginator.page(page)
+    except PageNotAnInteger:
+        #if page not an integer deliver the first page 
+        questions=paginator.page(1)
+    except EmptyPage:
+        #if page is out of range deliver the last past
+        questions=paginator.page(paginator.num)
+    page_obj = paginator.get_page(page)
+    return(render(request,"question/homepage.html",{"questions":questions,"page_obj":page_obj}))
 
 
 @login_required
