@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  ab:
+   build:
+     context: .
+   ports:
+    - "8000:8000"
+   volumes:
+    - ./src:/src
+   environment:
+    - SECRET_KEY=${SECRET_KEY}
+    - EMAIL_ADDRESS=${EMAIL_ADDRESS}
+    - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+   command: >
+    sh -c "python3 manage.py runserver 0.0.0.0:8000"
