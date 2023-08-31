@@ -14,6 +14,8 @@ db.sqlite3
 
 #Ignore os environment 
 .bash_profile
+.env
+.env.prod
 
 #Ignore migrations 
 migrations/
