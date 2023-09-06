@@ -5,19 +5,17 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 
 class CustomeUserManager(BaseUserManager):
 
-    def create_user(self, email, national_code, date_of_birth, password=None):  
+    def create_user(self, email,  password=None, **extra_fields):  
         if(not email):
             raise ValueError("فیلد ایمیل ضرورری است!")
         user = self.model(
             email = self.normalize_email(email),
-            national_code = national_code,
-            date_of_birth = date_of_birth
         )
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_useruser(self, email, national_code, date_of_birth, password=None):
+    def create_superuser(self, email, national_code, date_of_birth, password=None, **extra_fields):
         if (not national_code):
             raise ValueError(" کد ملی برای ادمین ضروری است!")
         
@@ -46,7 +44,7 @@ class CustomeUser(AbstractBaseUser):
         blank=True,
     )
     is_active=models.BooleanField(default=False)
-    is_admin=models.BooleanField(default=False)
+    is_staff=models.BooleanField(default=False)
     
     objects=CustomeUserManager()
 
