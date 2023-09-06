@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     #local 
     'account.apps.AccountConfig',
     'question.apps.QuestionConfig',
+    'core.apps.CoreConfig',
 
     #django 
     'django.contrib.admin',
@@ -150,3 +151,5 @@ EMAIL_HOST_USER=get_secret("EMAIL_ADDRESS")
 EMAIL_HOST_PASSWORD=get_secret("EMAIL_PASSWORD")
 EMAIL_USE_TLS=True
 EMAIL_PORT=587
+
+AUTH_USER_MODEL = 'core.CustomeUser'
