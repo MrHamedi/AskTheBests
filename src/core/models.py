@@ -23,7 +23,8 @@ class CustomeUserManager(BaseUserManager):
             raise ValueError("تاریخ تولد ادمین باید مشخص باشد!")
 
         user = self.create_user(email, date_of_birth=date_of_birth, national_code=national_code, password=password)
-        user.is_admin=True 
+        user.is_staff=True 
+        user.is_superuser=True
         user.save(using=self._db)
         return user
 
@@ -45,6 +46,7 @@ class CustomeUser(AbstractBaseUser):
     )
     is_active=models.BooleanField(default=False)
     is_staff=models.BooleanField(default=False)
+    is_superuser=models.BooleanField(default=False)
     
     objects=CustomeUserManager()
 
