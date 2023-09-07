@@ -20,7 +20,9 @@ services:
     - DB_PASSWORD=${DB_PASSWORD}
 
    command: >
-    sh -c "python3 manage.py runserver 0.0.0.0:8000"
+    sh -c "python3 manage.py call_db &&
+           python3 manage.py migrate &&
+           python3 manage.py runserver 0.0.0.0:8000"
 
    depends_on:
     - db
