@@ -10,8 +10,8 @@ jobs:
      - name: Login with actions
        uses: docker/login-action@v1
        with:
-        username: ${{secrets.GITHUB_USER}}
-        password: ${{secrets.GITHUB_TOKEN}}
+        username: ${{secrets.DOCKERHUB_USER}}
+        password: ${{secrets.DOCKERHUB_TOKEN}}
      
      - name: check out
        uses: actions/checkout@v2
