@@ -1,0 +1,2 @@
+from .user_tests import UserTestCase
+from .management_commands_tests import ManagementCommandsTestCase
