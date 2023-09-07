@@ -25,7 +25,11 @@ class ManagementCommandsTestCase(TestCase):
             will call call_db againg
         """
         with patch('django.db.utils.ConnectionHandler.__getitem__') as gi:
+<<<<<<< Updated upstream
             gi.side_effects = [OperationalError] * 3 + [True]
+=======
+            gi.side_effect = [OperationalError] * 3 + [True]
+>>>>>>> Stashed changes
             call_command('call_db')
             self.assertEqual(gi.call_count, 4)
                         
