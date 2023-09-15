@@ -23,10 +23,11 @@ services:
     sh -c "python3 manage.py call_db &&
            python3 manage.py migrate &&
            python3 manage.py runserver 0.0.0.0:8000"
-
+   
    depends_on:
     - db
 
+   tty: true
   db:
     image: postgres:10-alpine
 
