@@ -16,6 +16,11 @@ jobs:
      - name: check out
        uses: actions/checkout@v2
 
+     - name: Set up project secrets 
+       env: 
+         SECRET_KEY: ${{ secrets.SECRET_KEY }}
+       run: echo "SECRET_KEY=${SECRET_KEY}" >> $GITHUB_ENV
+         
      - name: Test
        run: docker compose run --rm ab sh -c "python3 manage.py test"
     
