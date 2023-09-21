@@ -1,10 +1,12 @@
 from django.urls import path,include,reverse_lazy,reverse
-from .views import login_view,logout_view,register_view,account_activator_view,code_sender_view
+from .views import login_view,logout_view,register_view,account_activator_view,code_sender_view, CreateUserView
 from django.contrib.auth.views import PasswordChangeView, PasswordResetCompleteView,PasswordResetView,PasswordResetConfirmView,PasswordResetDoneView,PasswordChangeDoneView
 
 app_name="account" 
 
 urlpatterns = [
+    path("sign-up/", CreateUserView.as_view(), name="create_user"),
+
     path("login/",login_view,name="login_view"),
     path("logout/",logout_view,name="logout_view"),
     path("register/",register_view,name="register_view"),
