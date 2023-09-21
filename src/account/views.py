@@ -1,22 +1,22 @@
-from django.http.response import HttpResponse, HttpResponseRedirect
+import json
+import datetime
+import random 
+from rest_framework import generics
+
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import login,authenticate,logout
-from .forms import login_form,register_form
 from django.contrib import messages
-from django.urls import reverse
 from django.utils.safestring import mark_safe
-from .utils import database_checker
-from django.views.generic import FormView,TemplateView
-from django.urls import reverse
-from django.contrib.auth.views import  PasswordResetView
-import random 
-from .forms  import account_activator
-import datetime
 from django.utils import timezone
 from django.core.mail import send_mail
-import json
+
+from .forms  import account_activator, login_form,register_form
 from .models import Profile
+from .utils import database_checker
+from .serializers import UserCreationSerializer
+from rest_framework.decorators import api_view
 
 
 def login_view(request):
@@ -119,3 +119,7 @@ def account_activator_view(request,username,countdown=False):
         form=account_activator()  
     return(render(request,"account/registration/account_activator.html",{"account":account,"form":form,"countdown":js_count}))
 
+
+class CreateUserView(generics.CreateAPIView):
+    serializer_class=UserCreationSerializer
+    
