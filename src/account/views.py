@@ -2,6 +2,8 @@ import json
 import datetime
 import random 
 from rest_framework import generics
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.settings import api_settings
 
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render,redirect,get_object_or_404
@@ -15,7 +17,7 @@ from django.core.mail import send_mail
 from .forms  import account_activator, login_form,register_form
 from .models import Profile
 from .utils import database_checker
-from .serializers import UserCreationSerializer
+from .serializers import UserCreationSerializer, TokenSerializer
 from rest_framework.decorators import api_view
 
 
@@ -123,3 +125,7 @@ def account_activator_view(request,username,countdown=False):
 class CreateUserView(generics.CreateAPIView):
     serializer_class=UserCreationSerializer
     
+
+class TokenLogin(ObtainAuthToken):
+    serializer_class=TokenSerializer
+    renderer_class=api_settings.DEFAULT_RENDERER_CLASSES
