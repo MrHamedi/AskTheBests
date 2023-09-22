@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     #3rd pa
     'taggit',
     'rest_framework',
+    'rest_framework.authtoken',
 
     #local 
     'account.apps.AccountConfig',
