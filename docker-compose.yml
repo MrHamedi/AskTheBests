@@ -16,7 +16,7 @@ services:
 
     - DB_NAME=askb_db
     - DB_HOST=db
-    - DB_USER=${DB_USERNAME}
+    - DB_USER=${DB_USER}
     - DB_PASSWORD=${DB_PASSWORD}
 
    command: >
@@ -33,5 +33,5 @@ services:
 
     environment:
      - POSTGRES_DB=askb_db
-     - POSTGRES_USER=${DB_USERNAME}
+     - POSTGRES_USER=${DB_USER}
      - POSTGRES_PASSWORD=${DB_PASSWORD}
