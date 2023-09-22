@@ -1,26 +1,39 @@
 ---
 
-name: checks
-on: [push]
-jobs:
-  test:
-   name: unit tests
-   runs-on: ubuntu-20.04
-   steps:
-     - name: Login with actions
-       uses: docker/login-action@v1
-       with:
-        username: ${{secrets.DOCKERHUB_USER}}
-        password: ${{secrets.DOCKERHUB_TOKEN}}
-     
-     - name: check out
-       uses: actions/checkout@v2
+version: "3.8"
 
-     - name: Set up project secrets 
-       env: 
-         SECRET_KEY: ${{ secrets.SECRET_KEY }}
-       run: echo "SECRET_KEY=${SECRET_KEY}" >> $GITHUB_ENV
-         
-     - name: Test
-       run: docker compose run --rm ab sh -c "python3 manage.py test"
+services:
+  ab:
+   build:
+     context: .
+   ports:
+    - "8000:8000"
+   volumes:
+    - ./src:/src
+   environment:
+    - SECRET_KEY=${SECRET_KEY}
     
+    - EMAIL_ADDRESS=${EMAIL_ADDRESS}
+    - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+
+    - DB_NAME=askb_db
+    - DB_HOST=db
+    - DB_USER=${DB_USER}
+    - DB_PASSWORD=${DB_PASSWORD}
+
+   command: >
+    sh -c "python3 manage.py call_db &&
+           python3 manage.py migrate &&
+           python3 manage.py runserver 0.0.0.0:8000"
+   
+   depends_on:
+    - db
+
+   tty: true
+  db:
+    image: postgres:10-alpine
+
+    environment:
+     - POSTGRES_DB=askb_db
+     - POSTGRES_USER=${DB_USER}
+     - POSTGRES_PASSWORD=${DB_PASSWORD}
