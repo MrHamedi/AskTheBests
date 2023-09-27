@@ -37,6 +37,7 @@ jobs:
           echo "SECRET_KEY=${SECRET_KEY}" >> $GITHUB_ENV
           echo "DB_USER=${DB_USER}" >> $GITHUB_ENV
           echo "DB_PASSWORD=${DB_PASSWORD}" >> $GITHUB_ENV
+          echo "DB_NAME=${DB_NAME}" >> $GITHUB_ENV
      - name: Test
        run: docker compose run --rm ab sh -c "python3 manage.py test"
     
