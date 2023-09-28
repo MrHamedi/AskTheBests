@@ -31,8 +31,9 @@ jobs:
      - name: Set up project secrets 
        env: 
          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-         DB_NAME: ${{ secrets.DB_USER }}
-         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}"
+         DB_USER: ${{ secrets.DB_USER }}
+         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+         DB_NAME: ${{ secrets.DB_NAME }}
        run: |
           echo "SECRET_KEY=${SECRET_KEY}" >> $GITHUB_ENV
           echo "DB_USER=${DB_USER}" >> $GITHUB_ENV
