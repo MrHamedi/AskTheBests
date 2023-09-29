@@ -1,9 +1,12 @@
 from django.test import TestCase
 from django.shortcuts import reverse
 from django.contrib.auth import get_user_model
+import tempfile
 
 from rest_framework.test import APIClient
 from rest_framework import status
+from rest_framework.authtoken.models import Token
+from datetime import datetime
 
 
 def create_user(**params):
@@ -96,3 +99,49 @@ class PublicUserLoginTest(TestCase):
         response=self.client.post(self.TOKEN_URL, self.no_password_paylad)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertNotIn('token', response.data)        
+
+
+class PrivateUserManagementTest(TestCase):
+    USER_MANAGEMENT_URL=reverse("account:account_management")
+
+    def setUp(self):
+        user_creation_payload = {
+            'email': "test@gmail.com",
+            'password': "testpassword123123"
+        }
+        self.image = tempfile.NamedTemporaryFile(suffix=".jpg").name
+        self.birth_day=datetime(1991, 2, 2)
+        self.user_update_payload = {
+            'email' : "newtest@gmail.com",
+            "birthday": datetime(1991, 2, 2),
+            "profile_image": self.image,
+        }
+        self.user=create_user(**user_creation_payload)        
+        self.user_token, create=Token.objects.get_or_create(user=self.user)
+        self.client=APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.user_token.key}')
+
+    def test_valid_request(self):
+        response=self.client.put(
+                                 self.USER_MANAGEMENT_URL, 
+                                 self.user_update_payload,
+                                )
+        self.assertEqual(response.status, status.HTTP_200_OK)
+        self.user.refresh_db()
+        self.assertEqual(self.user.email, self.user_update_payload.email)
+        self.assertEqual(self.user.profile.pic, self.image)
+        self.assertEqual(self.user.birth_day, self.birth_day)
+
+    def test_not_logged_in_user(self):
+        test_client=APIClient()
+        response=test_client.put(
+            self.USER_MANAGEMENT_URL, 
+            self.user_update_payload
+        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_post_not_allowed(self):
+        response=self.client.post(self.USER_MANAGEMENT_URL, 
+                                  self.user_update_payload
+                                  )
+        self.assertEqual(response.status, status.HTTP_405_NOT_ALLOWED)
