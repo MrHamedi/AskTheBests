@@ -1,14 +1,16 @@
 import json
 import datetime
 import random 
-from rest_framework import generics
+from rest_framework import generics, authentication
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
+from rest_framework.permissions import IsAuthenticated
+
 
 from django.http.response import HttpResponseRedirect
-from django.shortcuts import render,redirect,get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
-from django.contrib.auth import login,authenticate,logout
+from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.contrib import messages
 from django.utils.safestring import mark_safe
 from django.utils import timezone
@@ -17,8 +19,8 @@ from django.core.mail import send_mail
 from .forms  import account_activator, login_form,register_form
 from .models import Profile
 from .utils import database_checker
-from .serializers import UserCreationSerializer, TokenSerializer
-from rest_framework.decorators import api_view
+from .serializers import (UserCreationSerializer, TokenSerializer, 
+                         UserInfoUpdateSerializer)
 
 
 def login_view(request):
@@ -124,8 +126,20 @@ def account_activator_view(request,username,countdown=False):
 
 class CreateUserView(generics.CreateAPIView):
     serializer_class=UserCreationSerializer
-    
+    renderer_classes=api_settings.DEFAULT_RENDERER_CLASSES
+
 
 class TokenLogin(ObtainAuthToken):
     serializer_class=TokenSerializer
-    renderer_class=api_settings.DEFAULT_RENDERER_CLASSES
+    renderer_classes=api_settings.DEFAULT_RENDERER_CLASSES
+
+
+class UserUpdateInfoView(generics.RetrieveUpdateAPIView):
+    serializer_class=UserInfoUpdateSerializer
+    renderer_classes=api_settings.DEFAULT_RENDERER_CLASSES
+    queryset=get_user_model().objects.all()
+    permission_classes=(IsAuthenticated,)
+    authentication_classes=(authentication.TokenAuthentication,)
+
+    def get_object(self):
+        return self.request.user
