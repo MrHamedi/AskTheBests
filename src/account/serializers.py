@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from django.core.validators import EmailValidator
 from django.contrib.auth import get_user_model, authenticate
+from django.db import transaction
 
 
 class UserCreationSerializer(serializers.ModelSerializer):
@@ -35,9 +36,9 @@ class TokenSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         user = authenticate(
-            self.context.get('request'),
-            attrs['email'],
-            attrs['password']
+            request=self.context.get('request'),
+            email=attrs['email'],
+            password=attrs['password']
         )
         if (user == None):
             raise serializers.ValidationError(
@@ -45,3 +46,24 @@ class TokenSerializer(serializers.Serializer):
             )
         attrs['user'] = user
         return attrs
+
+
+class UserInfoUpdateSerializer(serializers.ModelSerializer):
+    profile_image=serializers.ImageField(allow_empty_file=True,
+                                         source='profile.pic',
+                                         label="عکس پروفایل",
+                                        )
+    
+    class Meta:
+        model=get_user_model()
+        fields=('email', 'date_of_birth', 'profile_image')
+
+    def update(self, instance, validated_data):
+        with transaction.atomic():
+            instance.email=validated_data.get("email")
+            instance.date_of_birth=validated_data.get("date_of_birth")
+            instance.save()
+            profile=instance.profile
+            profile.pic=validated_data.get("profile").get("pic")
+            profile.save()
+        return instance
