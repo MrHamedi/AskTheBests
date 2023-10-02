@@ -1,10 +1,13 @@
 from django.urls import path,include,reverse_lazy,reverse
 from .views import (login_view,logout_view,register_view,TokenLogin,
-                    account_activator_view,code_sender_view, CreateUserView)
+                    account_activator_view,code_sender_view, CreateUserView,
+                    UserUpdateInfoView,
+                    )
 from django.contrib.auth.views import (PasswordChangeView, 
-                                PasswordResetCompleteView,PasswordResetView,
-                                PasswordResetConfirmView,PasswordResetDoneView,
-                                PasswordChangeDoneView)
+                                PasswordResetCompleteView, PasswordResetView,
+                                PasswordResetDoneView, PasswordChangeDoneView,   
+                                PasswordResetConfirmView,
+                                )
 
 app_name="account" 
 
@@ -12,6 +15,7 @@ urlpatterns = [
     #API urls
     path("sign-up/", CreateUserView.as_view(), name="create_user"),
     path("sign-in/", TokenLogin.as_view(), name="token"),
+    path("update_account/", UserUpdateInfoView.as_view(), name="account_management"),
 
     path("login/",login_view,name="login_view"),
     path("logout/",logout_view,name="logout_view"),

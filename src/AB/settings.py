@@ -158,3 +158,12 @@ EMAIL_USE_TLS=True
 EMAIL_PORT=587
 
 AUTH_USER_MODEL = 'core.CustomeUser'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.AllowAny',
+    ),
+}
