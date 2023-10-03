@@ -1,1 +1,2 @@
-from .user_tests import PublicUserCreationTestCase
+from .user_tests import (PublicUserCreationTestCase, PublicUserLoginTest
+                        ,PrivateUserManagementTest)
