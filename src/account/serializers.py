@@ -60,10 +60,12 @@ class UserInfoUpdateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         with transaction.atomic():
-            instance.email=validated_data.get("email")
-            instance.date_of_birth=validated_data.get("date_of_birth")
+            instance.email=validated_data.get("email", instance.email)
+            instance.date_of_birth=validated_data.get("date_of_birth",
+                                                       instance.date_of_birth)
             instance.save()
-            profile=instance.profile
-            profile.pic=validated_data.get("profile").get("pic")
-            profile.save()
+            profile_image = validated_data.get("profile").get("pic")
+            if profile_image:
+                instance.profile.pic = profile_image
+                instance.profile.save()
         return instance
