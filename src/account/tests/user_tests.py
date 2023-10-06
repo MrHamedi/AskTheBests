@@ -110,10 +110,10 @@ class PrivateUserManagementTest(TestCase):
             'password': "testpassword123123"
         }
         self.image = tempfile.NamedTemporaryFile(suffix=".jpg").name
-        self.birth_day=datetime(1991, 2, 2)
+        self.date_of_birth=datetime(1991, 2, 2)
         self.user_update_payload = {
             'email' : "newtest@gmail.com",
-            "birthday": datetime(1991, 2, 2),
+            "date_of_birth": datetime(1991, 2, 2),
             "profile_image": self.image,
         }
         self.user=create_user(**user_creation_payload)        
@@ -126,22 +126,22 @@ class PrivateUserManagementTest(TestCase):
                                  self.USER_MANAGEMENT_URL, 
                                  self.user_update_payload,
                                 )
-        self.assertEqual(response.status, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.user.refresh_db()
         self.assertEqual(self.user.email, self.user_update_payload.email)
         self.assertEqual(self.user.profile.pic, self.image)
-        self.assertEqual(self.user.birth_day, self.birth_day)
+        self.assertEqual(self.user.date_of_birth, self.date_of_birth)
 
     def test_not_logged_in_user(self):
         test_client=APIClient()
-        response=test_client.put(
+        response=test_client.patch(
             self.USER_MANAGEMENT_URL, 
             self.user_update_payload
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_post_not_allowed(self):
-        response=self.client.post(self.USER_MANAGEMENT_URL, 
+        response=self.client.patch(self.USER_MANAGEMENT_URL, 
                                   self.user_update_payload
                                   )
-        self.assertEqual(response.status, status.HTTP_405_NOT_ALLOWED)
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
