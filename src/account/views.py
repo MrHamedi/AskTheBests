@@ -66,8 +66,6 @@ def register_view(request):
                 user.set_password(cd["password"])
                 user.is_active=False
                 user.save()
-                profile=Profile(user=user)
-                profile.save()
                 return(redirect("account:account_activator_view",user.username))
     else:
         form=register_form()
