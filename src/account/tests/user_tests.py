@@ -1,17 +1,21 @@
+import os
+import datetime
+
 from django.test import TestCase
 from django.shortcuts import reverse
 from django.contrib.auth import get_user_model
-import tempfile
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from rest_framework.test import APIClient
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from datetime import datetime
 
 
 def create_user(**params):
-    return get_user_model().objects.create_user(**params)
-
+    user=get_user_model().objects.create_user(**params)
+    user.is_active=True
+    user.save()
+    return user
 
 class PublicUserCreationTestCase(TestCase):
     User_Creation_URL = reverse("account:create_user")
@@ -55,7 +59,6 @@ class PublicUserCreationTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
-
 class PublicUserLoginTest(TestCase):    
 
     TOKEN_URL=reverse("account:token")
@@ -81,17 +84,27 @@ class PublicUserLoginTest(TestCase):
         self.client = APIClient()
 
     def test_token_creation(self):
-        response=self.client.post(self.TOKEN_URL, self.valid_credentials_payload)
+        response=self.client.post(
+                                  self.TOKEN_URL, 
+                                  self.valid_credentials_payload, 
+                                  format='json',
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('token', response.data)
 
     def test_token_creation_with_non_existing_user(self):
-        response=self.client.post(self.TOKEN_URL, self.non_existing_user_payload)
+        response=self.client.post(
+                                  self.TOKEN_URL, 
+                                  self.non_existing_user_payload
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertNotIn('token', response.data)
 
     def test_token_creation_invalid_credentials(self):
-        response=self.client.post(self.TOKEN_URL, self.invalid_credentials_payload)
+        response=self.client.post(
+                                  self.TOKEN_URL, 
+                                  self.invalid_credentials_payload
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertNotIn('token', response.data)
 
@@ -109,32 +122,47 @@ class PrivateUserManagementTest(TestCase):
             'email': "test@gmail.com",
             'password': "testpassword123123"
         }
-        self.image = tempfile.NamedTemporaryFile(suffix=".jpg").name
-        self.date_of_birth=datetime(1991, 2, 2)
+        image_path = os.path.join(os.path.dirname(__file__), "images", "test.jpg")
+        with open(image_path, 'rb') as image_file:
+            self.test_image = image_file.read()
+        self.image_file = SimpleUploadedFile(
+                                             "profile_image.png", 
+                                             self.test_image, 
+                                             content_type="image/jpeg"
+        )
+
         self.user_update_payload = {
             'email' : "newtest@gmail.com",
-            "date_of_birth": datetime(1991, 2, 2),
-            "profile_image": self.image,
+            "date_of_birth": "2002-2-2",
+            "profile_image": self.image_file,
         }
         self.user=create_user(**user_creation_payload)        
-        self.user_token, create=Token.objects.get_or_create(user=self.user)
-        self.client=APIClient()
-        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.user_token.key}')
-
+        self.client = APIClient()
+        self.token = Token.objects.create(user=self.user)
+        self.client.force_login(user=self.user)
+ 
     def test_valid_request(self):
         response=self.client.put(
                                  self.USER_MANAGEMENT_URL, 
                                  self.user_update_payload,
-                                )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.user.refresh_db()
-        self.assertEqual(self.user.email, self.user_update_payload.email)
-        self.assertEqual(self.user.profile.pic, self.image)
-        self.assertEqual(self.user.date_of_birth, self.date_of_birth)
+                                 HTTP_AUTHORIZATION='Token {}'.format(self.token),
+                                 format='multipart',
+        )
+        self.assertEqual(
+                         response.status_code,
+                         status.HTTP_200_OK, 
+                         response.data
+        )
+        self.user.refresh_from_db()
+        
+        self.assertEqual(self.user.email, self.user_update_payload["email"])
+        actual_image_content = self.user.profile.pic.read()
+        self.assertEqual(actual_image_content, self.test_image)
+        self.assertEqual(self.user.date_of_birth, datetime.date(2002, 2, 2))
 
     def test_not_logged_in_user(self):
         test_client=APIClient()
-        response=test_client.patch(
+        response=test_client.put(
             self.USER_MANAGEMENT_URL, 
             self.user_update_payload
         )
@@ -144,4 +172,4 @@ class PrivateUserManagementTest(TestCase):
         response=self.client.patch(self.USER_MANAGEMENT_URL, 
                                   self.user_update_payload
                                   )
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
