@@ -142,7 +142,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS=[os.path.join(BASE_DIR,"AB","static"),os.path.join(BASE_DIR,"static")]
 
-MEDIA_URL = "/media/"
+MEDIA_URL = "media/"
 MEDIA_ROOT = os.path.join(BASE_DIR,"media")
 
 LOGIN_URL = reverse_lazy("account:login_view")
