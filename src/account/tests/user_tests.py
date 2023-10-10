@@ -5,6 +5,7 @@ from django.test import TestCase
 from django.shortcuts import reverse
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import override_settings
 
 from rest_framework.test import APIClient
 from rest_framework import status
@@ -141,6 +142,7 @@ class PrivateUserManagementTest(TestCase):
         self.token = Token.objects.create(user=self.user)
         self.client.force_login(user=self.user)
  
+    @override_settings(DEFAULT_FILE_STORAGE='django.core.files.storage.FileSystemStorage')
     def test_valid_request(self):
         response=self.client.put(
                                  self.USER_MANAGEMENT_URL, 
