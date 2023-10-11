@@ -1,18 +1,19 @@
+from taggit.managers import TaggableManager
+
 from django.db import models
 from django.contrib import auth 
-from taggit.managers import TaggableManager
 from django.urls import reverse
-from django.contrib.auth.models import User 
-from account.models import Profile 
+from django.utils.text import slugify
 
-class Question(models.Model):
+from core.models import TimeStampMixin, Profile
+
+
+class Question(TimeStampMixin):
     """
         This is the Question model 
     """
     title=models.CharField(help_text="The title of question",verbose_name="Title of question",max_length=200)
     body=models.TextField(verbose_name="The question")
-    publish=models.DateTimeField(auto_now_add=True,help_text="The publish date of post")
-    update=models.DateTimeField(verbose_name="The last update",auto_now=True)
     author=models.ForeignKey(auth.get_user_model(),on_delete=models.CASCADE,related_name="questions")
     score=models.IntegerField(help_text="The score of this question",default=0)
     slug=models.SlugField(max_length=200,unique=True)
@@ -23,29 +24,32 @@ class Question(models.Model):
 
     class Meta:
         ordering=("-publish",)
-        unique_together=("author","publish")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["author", "title"],
+                name="unique_titles_for_each_author",
+            )
+        ]
 
     def get_absolute_url(self):
         return(reverse("question:questionDetail",args=[self.pk]))
 
     def __str__(self):
         return(self.title)
+    
+    def save(self, *args, **kwargs):
+        if(not self.slug):
+            base_slug=slugify(self.title)
+            if(Question.objects.filter(slug=base_slug).exists()):
+                base_slug=base_slug+f"{self.author.id}"
+                self.slug=base_slug
+                super().save(*args, **kwargs)
+            else:
+                self.slug=base_slug
+            super().save(*args, **kwargs)
 
-    def slug_maker(self):
-        """
-            This function will create object slug in CreateView
-        """
-        slug=self.title+self.author.username+str(self.id)
-        return(slug)
 
-
-    @property
-    def score_counter(self):
-        score=self.liked_by.count()-self.disliked_by.count()
-        self.score=score
-        return(self.score)
-
-class Comment(models.Model):
+class Comment(TimeStampMixin):
     """
         This model is for client comments on question
     """
@@ -53,8 +57,6 @@ class Comment(models.Model):
     question=models.ForeignKey(Question,on_delete=models.PROTECT,help_text="The question that this comment has been written for",null=True,related_name="comments")
     content=models.TextField(verbose_name="Comment")
     score=models.IntegerField(help_text="The score of this comment")    
-    publish=models.DateTimeField(help_text="The publish time of this comment",verbose_name="Publish time",auto_now_add=True)
-    update=models.DateTimeField(help_text="The time of the last editting of this comment",verbose_name="Last update time",auto_now=True)
     liked_by=models.ManyToManyField(Profile,related_name="comment_liked_by",blank=True)
     disliked_by=models.ManyToManyField(Profile,related_name="comment_disliked_by",blank=True)
 
@@ -64,9 +66,3 @@ class Comment(models.Model):
 
     def __str__(self):
         return(self.content)
-
-    @property
-    def score_counter(self):
-        score=self.liked_by.count()-self.disliked_by.count()
-        self.score=score
-        return(self.score)

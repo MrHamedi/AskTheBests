@@ -127,7 +127,7 @@ class PrivateUserManagementTest(TestCase):
                                  self.user_update_payload,
                                 )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.user.refresh_db()
+        self.user.refresh_from_db()
         self.assertEqual(self.user.email, self.user_update_payload.email)
         self.assertEqual(self.user.profile.pic, self.image)
         self.assertEqual(self.user.date_of_birth, self.date_of_birth)
