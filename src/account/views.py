@@ -17,7 +17,7 @@ from django.utils import timezone
 from django.core.mail import send_mail
 
 from .forms  import account_activator, login_form,register_form
-from .models import Profile
+from core.models import Profile
 from .utils import database_checker
 from .serializers import (UserCreationSerializer, TokenSerializer, 
                          UserInfoUpdateSerializer)
